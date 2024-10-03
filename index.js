@@ -41,10 +41,6 @@ app.use("/api", rutarecetario);
 app.use("/api", rutaplatoconIngrediente);
 
 
- 
-
-
-
 import { fileURLToPath } from 'url';
 import path  from 'path';
 const __filename = fileURLToPath(import.meta.url);
