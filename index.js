@@ -40,7 +40,6 @@ app.use("/api", rutacompra);
 app.use("/api", rutarecetario);
 app.use("/api", rutaplatoconIngrediente);
 
-
 import { fileURLToPath } from 'url';
 import path  from 'path';
 const __filename = fileURLToPath(import.meta.url);
@@ -51,14 +50,9 @@ const __dirname = path.dirname(__filename);
 const staticRoute = path.join(__dirname, 'uploads/imagenes/usuario');
 app.use('/imagenes', express.static(staticRoute));
 
- 
-
 // Ruta para servir la imagen por defecto
 const rutaImagenEstatica = path.join(__dirname, 'uploads', 'imagenes', 'usuario', 'fotoIconoUsuario.jpeg');
 app.use('/imagenes/usuario', express.static(rutaImagenEstatica));
-
-
-
 
 
 const main = async () => {
