@@ -2,6 +2,7 @@ import { recetarioModelo } from "../modelos/recetarioModelo.js";
  import { alimentoModelo } from "../modelos/alimentoModelo.js";
 import { platoModelo } from "../modelos/platoModelo.js";
 import { unidadMedidaModelo } from "../modelos/unidadMedidaModelo.js";
+import { platoconIngredienteModelo } from "../modelos/platoconIngredienteModelo.js";
 
 
 export const crearRecetario = async (req, res) => {
@@ -163,6 +164,70 @@ export const obtenerrecetario_PorPlato = async (req, res) => {
       res.status(500).json({ message: "Error al eliminar el producto y Plato" });
     }
   };
+
+  
+
+export const eliminarRecetariobasico = async (req, res) => {
+  try {
+      const { id_plato } = req.params;
+
+      // Validar campo requerido
+      if (!id_plato) {
+          return res.status(400).json({ message: "El campo id_plato es requerido" });
+      }
+
+      // Verificar si el plato existe en la relación recetario
+      const platoExistente = await recetarioModelo.findOne({
+          where: { id_plato },
+      });
+
+      if (!platoExistente) {
+          return res.status(404).json({ message: "El plato no existe" });
+      }
+
+      // Eliminar todos los registros relacionados con el id_plato
+      await recetarioModelo.destroy({
+          where: { id_plato },
+      });
+
+      res.status(200).json({ message: "Registros eliminados exitosamente" });
+  } catch (error) {
+      console.error('Error general:', error);
+      res.status(500).json({ message: "Error al eliminar los registros del recetario" });
+  }
+};
+
+
+
+export const eliminarRecetariodetallado = async (req, res) => {
+  try {
+      const { id_plato } = req.params;
+
+      // Validar campo requerido
+      if (!id_plato) {
+          return res.status(400).json({ message: "El campo id_plato es requerido" });
+      }
+
+      // Verificar si el plato existe en la relación recetario
+      const platoExistente = await platoconIngredienteModelo.findOne({
+          where: { id_plato },
+      });
+
+      if (!platoExistente) {
+          return res.status(404).json({ message: "El plato no existe" });
+      }
+
+      // Eliminar todos los registros relacionados con el id_plato
+      await platoconIngredienteModelo.destroy({
+          where: { id_plato },
+      });
+
+      res.status(200).json({ message: "Registros eliminados exitosamente" });
+  } catch (error) {
+      console.error('Error general:', error);
+      res.status(500).json({ message: "Error al eliminar los registros del recetario" });
+  }
+};
 
 
 

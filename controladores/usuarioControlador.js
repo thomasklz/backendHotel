@@ -1,4 +1,5 @@
 import { personaModelo } from "../modelos/personaModelo.js";
+import { tipo_usuarioModelo } from "../modelos/tipo_usuarioModelo.js";
 import { usuarioModelo } from "../modelos/usuarioModelo.js";
 
 import bcrypt from "bcrypt";
@@ -124,6 +125,54 @@ export const listadoadministradores = async (req, res) => {
     res.status(500).json("No existe  usuarios");
   }
 };
+
+
+
+export const listadoaCajero = async (req, res) => {
+  try {
+    const usuarios = await usuarioModelo.findAll({
+      include: [
+        {
+          model: personaModelo,
+          attributes: ["id","Apellido1","Apellido2","Nombre1", "Nombre2", "EmailInstitucional", "TelefonoC", "foto"],
+        },
+      ],
+
+      attributes: ["id", "Identificacion"],
+      where: { estado: true, id_tipousuario: 3 },
+    });
+
+    res.status(200).json({ usuarios });
+  } catch (error) {
+    res.status(500).json("No existe  usuarios");
+  }
+};
+
+
+
+export const listados = async (req, res) => {
+  try {
+    const usuarios = await usuarioModelo.findAll({
+      include: [
+        {
+          model: personaModelo,
+          attributes: ["id", "Apellido1", "Apellido2", "Nombre1", "Nombre2", "EmailInstitucional", "TelefonoC", "foto"],
+        },
+        {
+          model: tipo_usuarioModelo,
+          attributes: ["id", "tipo"],
+        },
+      ],
+      attributes: ["id", "Identificacion"],
+      where: { estado: true },
+    });
+
+    res.status(200).json({ usuarios });
+  } catch (error) {
+    res.status(500).json({ error: "No existe usuarios" });
+  }
+};
+
 
 export const obtusuario = async (req, res) => {
   try {

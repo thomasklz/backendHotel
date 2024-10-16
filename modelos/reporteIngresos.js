@@ -29,7 +29,12 @@ export const reporteIngresosModelo = sequelize.define(
     fecha: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-    },
+    }, 
+    precio: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    }, 
+    
    
   },
   {

@@ -149,7 +149,7 @@ import { reporteIngresosModelo } from "../modelos/reporteIngresos.js";
       const id = req.params.id; // Obtener el id del usuario de la solicitud
   
       const creditos = await creditoModelo.findAll({
-        where: { id_persona: id }, // Filtrar por el id del usuario
+        where: { id_persona: id, pagado:false }, // Filtrar por el id del usuario
         include: [
           {
             model: platoModelo,
@@ -277,6 +277,9 @@ import { reporteIngresosModelo } from "../modelos/reporteIngresos.js";
                 id_plato,
                 id_ingreso,
                 cantidadPlato: cantidadFija,
+                precio:precio 
+                 
+                 
             });
         }
 

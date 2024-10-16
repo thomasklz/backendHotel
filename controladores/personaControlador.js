@@ -300,21 +300,16 @@ export const crearPersona = async (req, res) => {
       // No hay registros en la tabla tipo_usuarioModelo, crear tipos de usuario por defecto
       const tipoAdministrador = await tipo_usuarioModelo.create({ tipo: "Administrador" });
       const tipoUsuario = await tipo_usuarioModelo.create({ tipo: "Cliente" });
+      const tipcajero = await tipo_usuarioModelo.create({ tipo: "Cajero" });
     }
-
     // Verificar si hay algún registro en la tabla tipo_menuModelo
     const tiposMenu = await tipo_menuModelo.findAll();
-
     if (tiposMenu.length === 0) {
       // No hay registros en la tabla tipo_menuModelo, crear tipos de menú por defecto
       const tipoDesayuno = await tipo_menuModelo.create({ tipo: "Desayuno", id: 1 });
       const tipoAlmuerzo = await tipo_menuModelo.create({ tipo: "Almuerzo", id: 2 });
       const tipoMerienda = await tipo_menuModelo.create({ tipo: "Merienda", id: 3 });
     }
-
-
-
-
      // Verificar si hay algún registro en la tabla unidad medidaa
      const unidadMedida = await unidadMedidaModelo.findAll();
 

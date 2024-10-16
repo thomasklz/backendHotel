@@ -267,7 +267,7 @@ export const obtenerplato = async (req, res) => {
       }
   
       // Eliminar permanentemente el registro del plato
-      await plato.destroy({ force: true });
+      await plato.destroy();
   
       res.status(200).json({ message: "Plato eliminado correctamente" });
     } catch (error) {

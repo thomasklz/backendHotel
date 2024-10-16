@@ -585,20 +585,19 @@ export const mostraralimentoss = async (req, res) => {
 export const eliminaralimentoCompra = async (req, res) => {
   try {
     const { id } = req.params;
-    const alimento = await compraModelo.findByPk(id);
+    const compra = await compraModelo.findByPk(id);
 
-    if (!alimento) {
-      return res.status(404).json({ message: "Alimento no encontrado" });
+    if (!compra) {
+      return res.status(404).json({ message: "Compra no encontrada" });
     }
 
-    // Eliminar permanentemente el registro del alimento
-    await alimento.destroy({ force: true });
+    // Eliminar permanentemente el registro de la compra
+    await compra.destroy();
 
-    res.status(200).json({ message: "Alimento eliminado correctamente" });
+    res.status(200).json({ message: "Compra eliminada correctamente" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al eliminar el alimento", details: error.message });
+    console.error("Error al intentar eliminar la compra:", error);
+    res.status(500).json({ error: "Error interno del servidor al intentar eliminar la compra", details: error.message });
   }
 };
-
   

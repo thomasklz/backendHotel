@@ -105,68 +105,74 @@ export const crearingredientesconsuplato = async (req, res) => {
 
 
 
+
   export const crearingredientesconsuplato = async (req, res) => {
     try {
-        const { id_plato } = req.body;
-
-        // Validar campos requeridos
-        if (!id_plato) {
-            return res.status(400).json({ message: "El campo id_plato es requerido" });
-        }
-
-        // Verificar si el plato ya existe en la relación productosplato
-        const platoExistente = await productosplatoModelo.findOne({
-            where: {
-                id_plato,
-            },
+      const { id_plato } = req.body;
+  
+      // Validar campos requeridos
+      if (!id_plato) {
+        return res.status(400).json({ message: "El campo id_plato es requerido" });
+      }
+  
+      // Verificar si el plato ya existe en la relación productosplato
+      const platoExistente = await productosplatoModelo.findOne({
+        where: { id_plato },
+      });
+  
+      if (platoExistente) {
+        // El plato ya existe en la relación productosplato
+        return res.status(400).json({ message: "Este plato ya existe" });
+      }
+  
+      // Obtener todos los ingredientes asociados con el plato
+      const ingredientes = await platoconIngredienteModelo.findAll({
+        where: { id_plato },
+      });
+  
+      // Si no hay ingredientes asociados, retornar error
+      if (ingredientes.length === 0) {
+        return res.status(400).json({ message: "No se encontraron ingredientes asociados a este plato" });
+      }
+  
+      // Crear registros en productosplatoModelo para cada ingrediente
+      for (const ingrediente of ingredientes) {
+        const id_alimento = ingrediente.id_alimento;
+  
+        // Buscar el alimento en compraModelo para obtener el preciounidad
+        const alimentoDb = await compraModelo.findOne({
+          where: { id_alimento },
+          attributes: ['preciounidad']
         });
-
-        if (platoExistente) {
-            // El plato ya existe en la relación productosplato
-            return res.status(400).json({ message: "Este plato ya existe" });
+  
+        if (!alimentoDb) {
+          return res.status(400).json({ message: `No se encontró el alimento con id ${id_alimento} en la compra` });
         }
-
-        // Obtener todos los ingredientes asociados con el plato
-        const ingredientes = await platoconIngredienteModelo.findAll({
-            where: {
-                id_plato,
-            },
+  
+        const preciounidad = alimentoDb.preciounidad;
+        const costeo = preciounidad / ingrediente.cantidadPersonaCome;
+  
+        // Crear registro en productosplatoModelo con los datos y cálculos necesarios
+        await productosplatoModelo.create({
+          id_plato,
+          id_alimento,
+          cantidadPersonaCome: ingrediente.cantidadPersonaCome,
+          cantidadPersonaGramo: ingrediente.cantidadPersonaGramo,
+          mes: ingrediente.mes,
+          fecha: ingrediente.fecha,
+          preciounidad: preciounidad,
+          costeo: costeo,
+          id_unidadMedida: ingrediente.id_unidadMedida
         });
-
-        // Si no hay ingredientes asociados, retornar error
-        if (ingredientes.length === 0) {
-            return res.status(400).json({ message: "No se encontraron ingredientes asociados a este plato" });
-        }
-
-        // Crear registros en productosplatoModelo para cada ingrediente
-        for (const ingrediente of ingredientes) {
-            const id_alimento = ingrediente.id_alimento;
-            const cantidadPersonaCome = ingrediente.cantidadPersonaCome;
-            const alimentoDb = await compraModelo.findByPk(id_alimento);
-            const unidadMedidaDb = await unidadMedidaModelo.findByPk(alimentoDb.id_unidadMedida);
-            const cantidadPersonaGramo = unidadMedidaDb.valorMedida / cantidadPersonaCome;
-
-            await productosplatoModelo.create({
-                id_plato,
-                id_alimento,
-                cantidadPersonaCome,
-                cantidadPersonaGramo,
-                preciounidad:alimentoDb.preciounidad,
-                costeo: alimentoDb.preciounidad / cantidadPersonaCome,
-                mes: new Date().getMonth() + 1, // Obtener el mes actual
-                fecha: new Date(),
-                id_unidadMedida: unidadMedidaDb.id, // Pasar el id de la unidad de medida
-            });
-        }
-
-        // Enviar una respuesta de éxito
-        res.status(201).json({ message: "Registros de productos creados exitosamente" });
+      }
+  
+      // Enviar una respuesta de éxito
+      res.status(201).json({ message: "Registros de productos creados exitosamente" });
     } catch (error) {
-        console.error('Error general:', error);
-        res.status(500).json({ message: "Error al crear productos con su plato" });
+      console.error('Error al transferir datos y calcular costeo:', error);
+      res.status(500).json({ message: "Error al crear productos con su plato" });
     }
-};
-
+  };
 
   
   

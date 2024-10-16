@@ -4,7 +4,7 @@ import { platoModelo } from "./platoModelo.js";
 import { alimentoModelo } from "./alimentoModelo.js";
 import { unidadMedidaModelo } from "./unidadMedidaModelo.js";
 
-export const platoconIngredienteModelo = sequelize.define("platoconIngrediente",{
+export const platoconIngredienteModelo = sequelize.define("platoconIngrediente", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -18,7 +18,7 @@ export const platoconIngredienteModelo = sequelize.define("platoconIngrediente",
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  mes: { // Agregar el campo "mes"
+  mes: { // Campo para el mes
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -26,24 +26,20 @@ export const platoconIngredienteModelo = sequelize.define("platoconIngrediente",
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
- 
-    },
-    {
-      timestamps: false,
-    }
-  );
-  
+}, {
+  timestamps: false,
+});
 
+// Relaciones entre platoconIngredienteModelo y otros modelos
 
+// Relación con platoModelo
+platoModelo.hasMany(platoconIngredienteModelo, { foreignKey: "id_plato", onDelete: 'CASCADE' });
+platoconIngredienteModelo.belongsTo(platoModelo, { foreignKey: "id_plato", onDelete: 'CASCADE' });
 
-// ... (resto del código)
+// Relación con alimentoModelo
+alimentoModelo.hasMany(platoconIngredienteModelo, { foreignKey: "id_alimento", onDelete: 'CASCADE' });
+platoconIngredienteModelo.belongsTo(alimentoModelo, { foreignKey: "id_alimento", onDelete: 'CASCADE' });
 
-platoModelo.hasMany(platoconIngredienteModelo, { foreignKey: "id_plato" });
-platoconIngredienteModelo.belongsTo(platoModelo, { foreignKey: "id_plato" });
-
-alimentoModelo.hasMany(platoconIngredienteModelo, { foreignKey: "id_alimento" });
-platoconIngredienteModelo.belongsTo(alimentoModelo, { foreignKey: "id_alimento" });
-
-unidadMedidaModelo.hasMany(platoconIngredienteModelo, { foreignKey: "id_unidadMedida"});
-platoconIngredienteModelo.belongsTo(unidadMedidaModelo, { foreignKey: "id_unidadMedida" });
-
+// Relación con unidadMedidaModelo
+unidadMedidaModelo.hasMany(platoconIngredienteModelo, { foreignKey: "id_unidadMedida", onDelete: 'CASCADE' });
+platoconIngredienteModelo.belongsTo(unidadMedidaModelo, { foreignKey: "id_unidadMedida", onDelete: 'CASCADE' });

@@ -2,31 +2,24 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../base_de_datos/conexion.js";
 import { unidadMedidaModelo } from "./unidadMedidaModelo.js";
 
-
-export const alimentoModelo = sequelize.define("alimento",{
+export const alimentoModelo = sequelize.define("alimento", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-      },
-      descripcion: {
+    },
+    descripcion: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-    
-  
-
-        estado: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true,
-          },
     },
-    {
-      timestamps: false,
-    }
-  );
-  
+    estado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    },
+}, {
+    timestamps: false,
+});
 
- //relacion entre la tabla tipo menu y menu
- unidadMedidaModelo.hasMany(alimentoModelo, { foreignKey: "id_unidadMedida" });
- alimentoModelo.belongsTo(unidadMedidaModelo, { foreignKey: "id_unidadMedida" });
+// Relación con unidadMedidaModelo
+unidadMedidaModelo.hasMany(alimentoModelo, { foreignKey: "id_unidadMedida", onDelete: 'CASCADE' });
+alimentoModelo.belongsTo(unidadMedidaModelo, { foreignKey: "id_unidadMedida" });

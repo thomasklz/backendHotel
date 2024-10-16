@@ -1,5 +1,5 @@
 import express from 'express';
-import {obtenerusuarioestado,cambiarestadousuario,listadoadministradores, obtenerNombrePorUsuario,obtenerusuario,obtenerusuariocedula,obtusuario,editarusuario,eliminarusuario,iniciarSesion,buscarUsuario, editUsuario,editContrasena } from '../controladores/usuarioControlador.js';
+import {listados,listadoaCajero,obtenerusuarioestado,cambiarestadousuario,listadoadministradores, obtenerNombrePorUsuario,obtenerusuario,obtenerusuariocedula,obtusuario,editarusuario,eliminarusuario,iniciarSesion,buscarUsuario, editUsuario,editContrasena } from '../controladores/usuarioControlador.js';
 import  {verifyToken}  from '../software_intermedio/autenticacion.js';
 const rotuer = express.Router();
 
@@ -10,6 +10,11 @@ rotuer.get('/obtenerusuarioestado', obtenerusuarioestado);
 
 rotuer.get('/obtenerusuariocedula', obtenerusuariocedula);
 rotuer.get('/listadoadministradores', listadoadministradores);
+rotuer.get('/listadoaCajero', listadoaCajero);
+rotuer.get('/listados', listados);
+
+
+
 
 
 

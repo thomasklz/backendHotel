@@ -1,26 +1,16 @@
+// rutas/reporteIngresosRuta.js
 import express from 'express';
-import { crearreporteIngresos,buscarReportePorIdYFecha,buscarReportePorRangoFechaYPlato,buscarReportePorMesYPlato} from '../controladores/reporteIngresosControlador.js';
-import  {verifyToken}  from '../software_intermedio/autenticacion.js';
-const rotuer = express.Router();
+import {buscarPorSemana, buscarPorMes, buscarReportePorFecha, crearreporteIngresos, buscarReportePorIdYFecha, buscarReportePorRangoFechaYPlato, buscarReportePorMesYPlato } from '../controladores/reporteIngresosControlador.js';
+
+const router = express.Router();
+
+router.post('/crearreporteIngresos', crearreporteIngresos);
+router.get('/buscarReportePorIdYFecha/:id_plato/:fecha', buscarReportePorIdYFecha);
+router.get('/buscarReportePorRangoFechaYPlato/:id_plato/:fechaInicio/:fechaFin', buscarReportePorRangoFechaYPlato);
+router.get('/buscarReportePorMesYPlato/:id_plato/:mes', buscarReportePorMesYPlato);
+router.get('/buscarReportePorFecha/:fecha', buscarReportePorFecha);
+router.get('/buscarPorMes/:mes', buscarPorMes); // Ruta para buscar por mes
+router.get('/buscarPorSemana/:fechaInicio/:fechaFin', buscarPorSemana);
 
 
-rotuer.post('/crearreporteIngresos', crearreporteIngresos);
-
- rotuer.get('/buscarReportePorIdYFecha/:id_plato/:fecha', buscarReportePorIdYFecha);
- rotuer.get('/buscarReportePorRangoFechaYPlato/:id_plato/:fechaInicio/:fechaFin', buscarReportePorRangoFechaYPlato);
- rotuer.get('/buscarReportePorMesYPlato/:id_plato/:mes', buscarReportePorMesYPlato);
-
-
-/* 
-
-rotuer.get('/mostrarcredito', obtenercredito);
-rotuer.get('/obtenerreporteporusuario/:id', obtenerreporteporusuario);
-
-
-rotuer.put('/editarcredito/:id', editarcredito);
-rotuer.delete('/eliminarcreditosss/:id',  eliminarcreditosss);
-
-
-rotuer.get('/ingresos/:fecha/:id_plato', ingresos); */
-
-export default rotuer;
+export default router;
