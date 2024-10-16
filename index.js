@@ -17,9 +17,7 @@ import rutaunidadMedida from "./rutas/unidadMedidaRuta.js";
 import rutacompra from "./rutas/compraRuta.js";
 import rutarecetario from "./rutas/recetarioRuta.js";
 import rutaplatoconIngrediente from "./rutas/platoconIngredienteRuta.js";
-
 import { sequelize } from "./base_de_datos/conexion.js";
-
 const _PORT = PORT || 3000;
 const app = express();
 app.use(express.json());
@@ -49,12 +47,11 @@ app.use('/imagenes', express.static(staticRoute));
 // Ruta para servir la imagen por defecto
 const rutaImagenEstatica = path.join(__dirname, 'uploads', 'imagenes', 'usuario', 'fotoIconoUsuario.jpeg');
 app.use('/imagenes/usuario', express.static(rutaImagenEstatica));
-
 const main = async () => {
   try {
     await sequelize.authenticate();
     console.log("la Base de datos esta correctamente conectada.");
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ force: true });
     app.listen(_PORT, () => {
       console.log(`Servidor corriendo en el puerto => ${_PORT}`);
     });
